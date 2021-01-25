@@ -20,8 +20,8 @@ namespace ThirdProjectEFCoreFluentApi.Controllers
         [HttpGet("{id}")]
         public IActionResult GetVendors([FromRoute] int id)
         {
-            var result = _vendorService.GetVendorsById(id);
-            return Ok(result);
+            var getVendorById = _vendorService.GetVendorsById(id);
+            return Ok(getVendorById);
         }
 
         [HttpPost]
@@ -66,8 +66,8 @@ namespace ThirdProjectEFCoreFluentApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteVendor([FromRoute] int id)
         {
-            var result = _vendorService.Delete(id);
-            if (result)
+            var vendorDeleted = _vendorService.Delete(id);
+            if (vendorDeleted)
             {
                 return Ok();
             }
