@@ -12,7 +12,6 @@ namespace ThirdProjectEFCoreFluentApi.Contexts
         public DbSet<Vendor> Vendor { get; set; }
         public DbSet<Tag> Tag { get; set; }
 
-        //Using Fluent Api
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Vendor>()
@@ -35,19 +34,13 @@ namespace ThirdProjectEFCoreFluentApi.Contexts
                 .Property(t => t.Date)
                 .IsRequired();
 
-            //modelBuilder.Entity<Vendor>() // In HasMany it is Set u dont need to Code this Block
-            //    .Property(t => t.Tags)
-            //    .HasMaxLength(512)
-            //    .HasColumnName("VendorTags")
-            //    .IsRequired();
-
             modelBuilder.Entity<Vendor>()
                 .HasMany(t => t.Tags)
                 .WithOne(v => v.Vendor)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
 
-            //Tags
+
             modelBuilder.Entity<Tag>()
                 .ToTable("Tag_FluentApi")
                 .HasKey(id => id.Id)
@@ -56,7 +49,6 @@ namespace ThirdProjectEFCoreFluentApi.Contexts
             modelBuilder.Entity<Tag>()
                 .HasOne(V => V.Vendor)
                 .WithMany(t => t.Tags)
-                //.IsRequired()
                 .HasForeignKey(vId => vId.VendorId);
 
             modelBuilder.Entity<Tag>()

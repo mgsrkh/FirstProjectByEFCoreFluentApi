@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using ThirdProjectEFCoreFluentApi.ApplicationServices.IServices;
 using ThirdProjectEFCoreFluentApi.DTOs.Vendors;
+using ThirdProjectEFCoreFluentApi.Models;
 
 namespace ThirdProjectEFCoreFluentApi.Controllers
 {
@@ -17,64 +20,49 @@ namespace ThirdProjectEFCoreFluentApi.Controllers
         [HttpGet("{id}")]
         public IActionResult GetVendors([FromRoute] int id)
         {
-            var result = _vendorService.GetAll(id);
+            var result = _vendorService.GetVendorsById(id);
             return Ok(result);
         }
 
         [HttpPost]
-        public IActionResult InsertVendor([FromBody] VendorInsertDTO dto)
+        public IActionResult InsertVendor([FromBody] VendorInsertResponseDTO dto)
         {
-            var result = _vendorService.Insert(dto);
+            var vendorInsertResponse = _vendorService.Insert(dto);
 
-            if (result)
-            {
-                return Ok();
-            }
-            else
-            {
-                return BadRequest();
-            }
+            return Created(new Uri($"/api/Vendors/{vendorInsertResponse.Id}", UriKind.Relative), vendorInsertResponse);
         }
+
         [HttpPut]
         public IActionResult UpdateVendor(VendorUpdateDTO dto)
         {
-            var result = _vendorService.Update(dto);
-            if (result)
-            {
-                return Ok();
-            }
-            else
-            {
-                return BadRequest();
-            }
-        }
-        //[HttpPatch("{id}")]
-        //public StatusCodeResult PatchVendor([FromBody] JsonPatchDocument<VendorDTO> patch, [FromRoute] int id)
-        //{
-        //    var res = _vendorService.GetByIdForJsonPatch(patch, id);
-        //    if (res)
-        //    {
-        //        return Ok();
-        //    }
-        //    else
-        //    {
-        //        return BadRequest();
-        //    }
-        //}
-        [HttpPatch("{id}")]
-        public IActionResult PatchVendor([FromBody] VendorPatchDTO patch, [FromRoute] int id)
-        {
-            var result = _vendorService.GetByIdForPatch(patch, id);
-            if (result)
-            {
-                return Ok();
-            }
-            else
-            {
-                return BadRequest();
-            }
-        }
+            var vendorUpdateResponse = _vendorService.Update(dto);
 
+            if (vendorUpdateResponse)
+            {
+                return Ok(vendorUpdateResponse);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+        [HttpPatch("{id}")]
+        public StatusCodeResult PatchVendor([FromBody] JsonPatchDocument<Vendor> patch, [FromRoute] int id)
+        {
+            var jsonPatchApply = _vendorService.GetVendorByIdForJsonPatchDoc(id);
+
+            patch.ApplyTo(jsonPatchApply);
+
+            var savePatched = _vendorService.SavePatchChanges(jsonPatchApply);
+            if (savePatched > 0)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
         [HttpDelete("{id}")]
         public IActionResult DeleteVendor([FromRoute] int id)
         {

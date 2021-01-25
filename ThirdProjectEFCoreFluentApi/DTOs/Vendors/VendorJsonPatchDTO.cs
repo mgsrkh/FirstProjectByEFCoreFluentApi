@@ -6,12 +6,14 @@ using ThirdProjectEFCoreFluentApi.DTOs.Tags;
 
 namespace ThirdProjectEFCoreFluentApi.DTOs.Vendors
 {
-    public class VendorInsertDTO
+    public class VendorJsonPatchDTO
     {
-        public VendorInsertDTO()
+        public VendorJsonPatchDTO()
         {
-            Tags = new List<TagDTO>();
+            Tags = new HashSet<TagDTO>();
         }
+        [Required]
+        public int Id { get; set; }
         [Required]
         [MaxLength(128)]
         public string Name { get; set; }
@@ -21,6 +23,6 @@ namespace ThirdProjectEFCoreFluentApi.DTOs.Vendors
         [Required]
         public DateTime Date { get; set; }
         [TagsIcollectionAnnotation]
-        public List<TagDTO> Tags { get; set; }
+        public ICollection<TagDTO> Tags { get; set; }
     }
 }

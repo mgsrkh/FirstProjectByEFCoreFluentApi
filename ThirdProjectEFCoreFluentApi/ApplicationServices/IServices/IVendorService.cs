@@ -1,16 +1,17 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
 using ThirdProjectEFCoreFluentApi.DTOs.Vendors;
+using ThirdProjectEFCoreFluentApi.Models;
 
 namespace ThirdProjectEFCoreFluentApi.ApplicationServices.IServices
 {
     public interface IVendorService
     {
-        VendorDTO GetAll(int id);
-        bool Insert(VendorInsertDTO dto);
+        Vendor GetVendorByIdForJsonPatchDoc(int id);
+        VendorDTO GetVendorsById(int id);
+        VendorInsertResponseDTO Insert(VendorInsertResponseDTO dto);
         bool Update(VendorUpdateDTO dto);
         bool Delete(int id);
-        bool Patch(int id);
-        bool GetByIdForPatch(VendorPatchDTO dto, int id);
-        bool GetByIdForJsonPatch(JsonPatchDocument<VendorDTO> vendorPatch, int id);
+        Vendor GetByIdForJsonPatch(JsonPatchDocument<VendorJsonPatchDTO> vendorPatch, int id);
+        int SavePatchChanges(Vendor vendor);
     }
 }

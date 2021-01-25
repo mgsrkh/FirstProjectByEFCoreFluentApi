@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
-namespace ThirdProjectEFCoreFluentApi.DTOs.Tags
+namespace ThirdProjectEFCoreFluentApi.CustomAnnotation
 {
-    public class TagDTO
+    public class TagsIcollectionAnnotation : Attribute
     {
         [Required]
         [MaxLength(128)]

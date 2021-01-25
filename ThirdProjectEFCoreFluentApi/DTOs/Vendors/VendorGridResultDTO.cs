@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ThirdProjectEFCoreFluentApi.CustomAnnotation;
 
 namespace ThirdProjectEFCoreFluentApi.DTOs.Vendors
 {
@@ -8,6 +9,7 @@ namespace ThirdProjectEFCoreFluentApi.DTOs.Vendors
         {
             VendorDTOs = vendorDTOs;
         }
+        [TagsIcollectionAnnotation]
         public ICollection<VendorDTO> VendorDTOs { get; set; }
     }
 }
